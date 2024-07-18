@@ -7,13 +7,9 @@
  * Created: 17 Jul 2024
  */
 
-CREATE TABLE IF NOT EXISTS users (
+CREATE TABLE IF NOT EXISTS kategori (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    nama VARCHAR(255) NOT NULL,
-    email VARCHAR(255) UNIQUE NOT NULL,
-    password VARCHAR(255) NOT NULL,
-    alamat TEXT,
-    phone VARCHAR(20)
+    nama VARCHAR(255) NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS produk (
@@ -26,9 +22,13 @@ CREATE TABLE IF NOT EXISTS produk (
     FOREIGN KEY (kategori_id) REFERENCES kategori(id)
 );
 
-CREATE TABLE IF NOT EXISTS kategori (
+CREATE TABLE IF NOT EXISTS users (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    nama VARCHAR(255) NOT NULL
+    nama VARCHAR(255) NOT NULL,
+    email VARCHAR(255) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    alamat TEXT,
+    phone VARCHAR(20)
 );
 
 CREATE TABLE IF NOT EXISTS pesanan (
@@ -50,3 +50,4 @@ CREATE TABLE IF NOT EXISTS detail_pesanan (
 );
 
 INSERT INTO users(nama, email, password) VALUES("Super Admin", "super@admin.com", md5("superadmin"));
+
