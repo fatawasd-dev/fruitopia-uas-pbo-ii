@@ -5,11 +5,11 @@
         <group>
             <file>file:/C:/Users/Asani/Documents/NetBeansProjects/Fruitopia/src/fruitopia/model/Login.java</file>
             <file>file:/C:/Users/Asani/Documents/NetBeansProjects/Fruitopia/sql/migration.sql</file>
-            <file>file:/C:/Users/Asani/Documents/NetBeansProjects/Fruitopia/build.xml</file>
             <file>file:/C:/Users/Asani/Documents/NetBeansProjects/Fruitopia/src/fruitopia/Fruitopia.java</file>
             <file>file:/C:/Users/Asani/Documents/NetBeansProjects/Fruitopia/src/fruitopia/model/LoginDAO.java</file>
             <file>file:/C:/Users/Asani/Documents/NetBeansProjects/Fruitopia/src/fruitopia/view/LoginView.java</file>
             <file>file:/C:/Users/Asani/Documents/NetBeansProjects/Fruitopia/src/fruitopia/controller/LoginController.java</file>
+            <file>file:/C:/Users/Asani/Documents/NetBeansProjects/Fruitopia/src/fruitopia/view/HomeView.java</file>
         </group>
     </open-files>
 </project-private>

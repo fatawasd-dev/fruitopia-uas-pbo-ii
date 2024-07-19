@@ -4,7 +4,9 @@
  */
 package fruitopia;
 
+import fruitopia.view.HomeView;
 import fruitopia.view.LoginView;
+import fruitopia.view.ProdukView;
 
 /**
  *
@@ -16,7 +18,9 @@ public class Fruitopia {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        LoginView login = new LoginView();
+//        LoginView login = new LoginView();
+//        login.setVisible(true);
+        HomeView login = new HomeView();
         login.setVisible(true);
     }
     

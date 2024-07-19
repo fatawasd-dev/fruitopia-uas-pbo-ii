@@ -17,8 +17,7 @@ public class LoginDAO {
     
     public LoginDAO() {
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            this.connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/fruitopia", "root", "");
+            this.connection = DatabaseConfig.getConnection();
         } catch (Exception e) {
             e.printStackTrace();
         }
