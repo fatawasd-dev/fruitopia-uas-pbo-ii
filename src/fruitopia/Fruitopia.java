@@ -20,7 +20,7 @@ public class Fruitopia {
     public static void main(String[] args) {
 //        LoginView login = new LoginView();
 //        login.setVisible(true);
-        HomeView login = new HomeView();
+        LoginView login = new LoginView();
         login.setVisible(true);
     }
     

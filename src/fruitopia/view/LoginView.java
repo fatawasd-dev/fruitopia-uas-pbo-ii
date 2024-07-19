@@ -118,8 +118,8 @@ public class LoginView extends javax.swing.JFrame {
         
         boolean isValidUser = controller.loginUser(email, password);
         if (isValidUser) {
-            new ProdukView().setVisible(true);
-//            new HomeView().setVisible(true);
+//            new ProdukView().setVisible(true);
+            new HomeView().setVisible(true);
             this.dispose();
         } else {
             txtError.setForeground(Color.red);
