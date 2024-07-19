@@ -7,7 +7,14 @@ package fruitopia.view;
 import fruitopia.controller.ProdukController;
 import fruitopia.model.Kategori;
 import fruitopia.model.Produk;
+import java.math.BigDecimal;
 import java.util.List;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import java.io.File;
+import java.nio.file.Files;
 
 /**
  *
@@ -35,6 +42,7 @@ class ComboBoxItem {
 public class ProdukView extends javax.swing.JFrame {
     final private ProdukController controller;
     private List<Kategori> categories;
+    private int productIdSelected = 0;
     /**
      * Creates new form ProdukView
      */
@@ -44,6 +52,51 @@ public class ProdukView extends javax.swing.JFrame {
         this.setLocationRelativeTo(null);
         loadCategoriesData();
         loadData();
+        txtImage.setEnabled(false);
+        
+        productTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                if (!e.getValueIsAdjusting() && productTable.getSelectedRow() != -1) {
+                    System.out.println("clicked");
+                    int id = Integer.parseInt(productTable.getValueAt(productTable.getSelectedRow(), 0).toString());
+                    String productName = productTable.getValueAt(productTable.getSelectedRow(), 1).toString();
+                    String productDescription = productTable.getValueAt(productTable.getSelectedRow(), 2).toString();
+                    String productPrice = productTable.getValueAt(productTable.getSelectedRow(), 3).toString();
+                    String productCategory = productTable.getValueAt(productTable.getSelectedRow(), 4).toString();
+                    String productImage = productTable.getValueAt(productTable.getSelectedRow(), 5).toString();
+
+                    productIdSelected = id;
+                    txtProductName.setText(productName);
+                    txtPrice.setText(productPrice);
+                    txtImage.setText(productImage);
+                    txtDescription.setText(productDescription);
+                    
+                    ComboBoxItem selectedCategory = findCategoryByName(productCategory);
+                    if (selectedCategory != null) {
+                        cmbKategori.setSelectedItem(selectedCategory);
+                    }
+                }
+            }
+        });
+    }
+    
+    private ComboBoxItem findCategoryByName(String categoryName) {
+        for (int i = 0; i < cmbKategori.getItemCount(); i++) {
+            ComboBoxItem item = cmbKategori.getItemAt(i);
+            if (item.toString().equals(categoryName)) {
+                return item;
+            }
+        }
+        return null;
+    }
+    
+    public void reset() {
+        txtProductName.setText("");
+        txtPrice.setText("");
+        txtDescription.setText("");
+        txtImage.setText("");
+        productIdSelected = 0;
     }
     
     public void displayProductList(List<Produk> productList) {
@@ -51,7 +104,6 @@ public class ProdukView extends javax.swing.JFrame {
         Object[][] data = new Object[productList.size()][6];
         for (int i = 0; i < productList.size(); i++) {
             Produk product = productList.get(i);
-            System.out.println(product.getNama()    );
             data[i][0] = product.getId();
             data[i][1] = product.getNama();
             data[i][2] = product.getDeskripsi();
@@ -94,18 +146,25 @@ public class ProdukView extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
-        jTextField1 = new javax.swing.JTextField();
+        txtDescription = new javax.swing.JTextArea();
+        txtImage = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
-        jTextField2 = new javax.swing.JTextField();
+        txtProductName = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
         cmbKategori = new javax.swing.JComboBox<>();
         btnSave = new javax.swing.JButton();
+        btnSave1 = new javax.swing.JButton();
+        btnSave2 = new javax.swing.JButton();
+        btnSave3 = new javax.swing.JButton();
+        jLabel6 = new javax.swing.JLabel();
+        txtPrice = new javax.swing.JTextField();
+        jButton1 = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenu2 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         productTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -120,22 +179,35 @@ public class ProdukView extends javax.swing.JFrame {
         ));
         jScrollPane1.setViewportView(productTable);
 
+        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(6, 308, 670, 326));
+
         jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         jLabel1.setText("Produk");
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(283, 6, -1, -1));
 
         jLabel2.setText("Nama");
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 50, -1, -1));
 
         jLabel3.setText("Deskripsi");
+        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 140, -1, -1));
 
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jScrollPane2.setViewportView(jTextArea1);
+        txtDescription.setColumns(20);
+        txtDescription.setRows(5);
+        jScrollPane2.setViewportView(txtDescription);
 
-        jLabel4.setText("Harga");
+        getContentPane().add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 140, -1, -1));
+        getContentPane().add(txtImage, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 90, 234, -1));
+
+        jLabel4.setText("Gambar");
+        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 90, -1, -1));
+        getContentPane().add(txtProductName, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 50, 234, -1));
 
         jLabel5.setText("Kategori");
+        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 90, -1, -1));
 
-        btnSave.setText("Simpan");
+        getContentPane().add(cmbKategori, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 90, 234, -1));
+
+        btnSave.setText("Reset");
         btnSave.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 btnSaveMouseClicked(evt);
@@ -146,6 +218,58 @@ public class ProdukView extends javax.swing.JFrame {
                 btnSaveActionPerformed(evt);
             }
         });
+        getContentPane().add(btnSave, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 270, -1, -1));
+
+        btnSave1.setText("Update");
+        btnSave1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnSave1MouseClicked(evt);
+            }
+        });
+        btnSave1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSave1ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnSave1, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 270, -1, -1));
+
+        btnSave2.setText("Delete");
+        btnSave2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnSave2MouseClicked(evt);
+            }
+        });
+        btnSave2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSave2ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnSave2, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 270, -1, -1));
+
+        btnSave3.setText("Simpan");
+        btnSave3.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnSave3MouseClicked(evt);
+            }
+        });
+        btnSave3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSave3ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnSave3, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 270, -1, -1));
+
+        jLabel6.setText("Harga");
+        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 50, -1, -1));
+        getContentPane().add(txtPrice, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 50, 234, -1));
+
+        jButton1.setText("Upload Gambar");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 130, -1, -1));
 
         jMenu1.setText("Home");
         jMenu1.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -160,74 +284,6 @@ public class ProdukView extends javax.swing.JFrame {
 
         setJMenuBar(jMenuBar1);
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 674, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(283, 283, 283)
-                                .addComponent(jLabel1))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(102, 102, 102)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING)
-                                            .addComponent(jLabel2))
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                            .addGroup(layout.createSequentialGroup()
-                                                .addGap(29, 29, 29)
-                                                .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 234, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jLabel4)
-                                            .addComponent(jLabel5))
-                                        .addGap(32, 32, 32)
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                            .addComponent(jTextField1)
-                                            .addComponent(cmbKategori, 0, 234, Short.MAX_VALUE))
-                                        .addGap(40, 40, 40)
-                                        .addComponent(btnSave)))))
-                        .addGap(0, 156, Short.MAX_VALUE)))
-                .addContainerGap())
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel1)
-                .addGap(17, 17, 17)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel4)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnSave))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel5)
-                    .addComponent(cmbKategori, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 21, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel3)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 326, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
-        );
-
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
@@ -237,14 +293,121 @@ public class ProdukView extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenu1MouseClicked
 
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
-        // TODO add your handling code here:
+        reset();
     }//GEN-LAST:event_btnSaveActionPerformed
 
     private void btnSaveMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnSaveMouseClicked
-        Object item = cmbKategori.getSelectedItem();
-        int value = ((ComboBoxItem)item).getId();
-        System.out.println(value);
+        
     }//GEN-LAST:event_btnSaveMouseClicked
+
+    private void btnSave1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnSave1MouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnSave1MouseClicked
+
+    private void btnSave1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSave1ActionPerformed
+        if (productIdSelected != 0) {
+            Object item = cmbKategori.getSelectedItem();
+            int categoryId = ((ComboBoxItem)item).getId();
+
+            String productName = txtProductName.getText();
+            String productDescription = txtDescription.getText();
+            int productPrice = Integer.parseInt(txtPrice.getText());
+            String imagePath = "images/" + txtImage.getText();
+            String imageName = saveImage(imagePath);
+            
+            controller.updateProduct(productIdSelected, productName, productDescription, productPrice, categoryId, imageName);
+            loadData();
+            reset();
+        }
+    }//GEN-LAST:event_btnSave1ActionPerformed
+
+    private void btnSave2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSave2ActionPerformed
+        if (productIdSelected != 0) {
+            int response = JOptionPane.showConfirmDialog(null, "Apakah Anda yakin ingin menghapus data ini?", "Konfirmasi Hapus", JOptionPane.YES_NO_OPTION);
+            
+            if (response == JOptionPane.YES_OPTION) {
+                Produk product = controller.getProduk(productIdSelected);
+                deleteImage(product.getGambar());
+                controller.deleteProduk(productIdSelected);
+                reset();
+                loadData();
+            }
+        }
+    }//GEN-LAST:event_btnSave2ActionPerformed
+
+    private void btnSave2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnSave2MouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnSave2MouseClicked
+
+    private void btnSave3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnSave3MouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnSave3MouseClicked
+
+    private void btnSave3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSave3ActionPerformed
+        if (
+                txtProductName.getText().isEmpty() ||
+                txtDescription.getText().isEmpty() ||
+                txtPrice.getText().isEmpty() ||
+                txtImage.getText().isEmpty()
+        ) {
+            JOptionPane.showMessageDialog(null, "Tolong isi semua data terlebih dahulu.", "Tidak ada data produk", JOptionPane.WARNING_MESSAGE);
+        } else {
+            int productPrice = 0;
+            try {
+                productPrice = Integer.parseInt(txtPrice.getText());
+                Object item = cmbKategori.getSelectedItem();
+                int categoryId = ((ComboBoxItem)item).getId();
+
+                String productName = txtProductName.getText();
+                String productDescription = txtDescription.getText();
+                String imagePath = txtImage.getText();
+                String imageName = saveImage(imagePath);
+
+                controller.addProduct(productName, productDescription, productPrice, categoryId, imageName);
+                reset();
+                loadData();
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(null, "Tolong isi hanya angka untuk harga.", "Harga hanya angka", JOptionPane.WARNING_MESSAGE);
+            }
+        }
+    }//GEN-LAST:event_btnSave3ActionPerformed
+
+    private void browseImage() {
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        int option = fileChooser.showOpenDialog(this);
+        if (option == JFileChooser.APPROVE_OPTION) {
+            File file = fileChooser.getSelectedFile();
+            txtImage.setText(file.getAbsolutePath());
+        }
+    }
+    
+    private String saveImage(String imagePath) {
+        File sourceFile = new File(imagePath);
+        String fileName = sourceFile.getName();
+        String destinationPath = "images/" + fileName;
+        File destinationFile = new File(destinationPath);
+        try {
+            Files.copy(sourceFile.toPath(), destinationFile.toPath(), java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+        }catch (java.io.IOException e) {
+            e.printStackTrace();
+        }
+        return fileName;
+    }
+    
+    private void deleteImage(String imageName) {
+        if (imageName != null && !imageName.isEmpty()) {
+            String imagePath = "images/" + imageName;
+            java.io.File file = new java.io.File(imagePath);
+            if (file.exists()) {
+                file.delete();
+            }
+        }
+    }
+    
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        browseImage();
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -283,20 +446,26 @@ public class ProdukView extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnSave;
+    private javax.swing.JButton btnSave1;
+    private javax.swing.JButton btnSave2;
+    private javax.swing.JButton btnSave3;
     private javax.swing.JComboBox<ComboBoxItem> cmbKategori;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTextArea jTextArea1;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
     private javax.swing.JTable productTable;
+    private javax.swing.JTextArea txtDescription;
+    private javax.swing.JTextField txtImage;
+    private javax.swing.JTextField txtPrice;
+    private javax.swing.JTextField txtProductName;
     // End of variables declaration//GEN-END:variables
 }

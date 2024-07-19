@@ -21,7 +21,7 @@ public class ProdukDAO {
             PreparedStatement stmt = connection.prepareStatement(query);
             stmt.setString(1, product.getNama());
             stmt.setString(2, product.getDeskripsi());
-            stmt.setBigDecimal(3, product.getHarga());
+            stmt.setInt(3, product.getHarga());
             stmt.setInt(4, product.getKategoriId());
             stmt.setString(5, product.getGambar());
             stmt.executeUpdate();
@@ -41,7 +41,7 @@ public class ProdukDAO {
                 product.setId(rs.getInt("id"));
                 product.setNama(rs.getString("nama"));
                 product.setDeskripsi(rs.getString("deskripsi"));
-                product.setHarga(rs.getBigDecimal("harga"));
+                product.setHarga(rs.getInt("harga"));
                 product.setKategoriId(rs.getInt("kategori_id"));
                 product.setGambar(rs.getString("gambar"));
                 product.setKategori(rs.getString("kategori"));
@@ -56,7 +56,7 @@ public class ProdukDAO {
     public Produk getProductById(int id) {
         Produk product = null;
         try {
-            String query = "SELECT p.*, k.nama AS kategori FROM produk p LEFT JOIN kategori k ON p.kategori_id = k.id WHERE id = ?";
+            String query = "SELECT p.*, k.nama AS kategori FROM produk p LEFT JOIN kategori k ON p.kategori_id = k.id WHERE p.id = ?";
             PreparedStatement stmt = connection.prepareStatement(query);
             stmt.setInt(1, id);
             ResultSet rs = stmt.executeQuery();
@@ -65,7 +65,7 @@ public class ProdukDAO {
                 product.setId(rs.getInt("id"));
                 product.setNama(rs.getString("nama"));
                 product.setDeskripsi(rs.getString("deskripsi"));
-                product.setHarga(rs.getBigDecimal("harga"));
+                product.setHarga(rs.getInt("harga"));
                 product.setKategoriId(rs.getInt("kategori_id"));
                 product.setGambar(rs.getString("gambar"));
                 product.setKategori(rs.getString("kategori"));
@@ -82,7 +82,7 @@ public class ProdukDAO {
             PreparedStatement stmt = connection.prepareStatement(query);
             stmt.setString(1, produk.getNama());
             stmt.setString(2, produk.getDeskripsi());
-            stmt.setBigDecimal(3, produk.getHarga());
+            stmt.setInt(3, produk.getHarga());
             stmt.setInt(4, produk.getKategoriId());
             stmt.setString(5, produk.getGambar());
             stmt.setInt(6, produk.getId());

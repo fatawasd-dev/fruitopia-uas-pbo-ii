@@ -7,10 +7,7 @@ package fruitopia.controller;
 import fruitopia.model.Kategori;
 import fruitopia.model.Produk;
 import fruitopia.model.ProdukDAO;
-import fruitopia.view.ProdukView;
 import java.util.List;
-import javax.swing.JOptionPane;
-import java.math.BigDecimal;
 /**
  *
  * @author Asani
@@ -27,7 +24,7 @@ public class ProdukController {
         return productList;
     }
     
-    public void addProduct(String nama, String deskripsi, BigDecimal harga, int kategoriId, String gambar) {
+    public void addProduct(String nama, String deskripsi, int harga, int kategoriId, String gambar) {
         Produk produk = new Produk();
         produk.setNama(nama);
         produk.setDeskripsi(deskripsi);
@@ -38,7 +35,7 @@ public class ProdukController {
         model.addProduct(produk);
     }
     
-        public void updateProduct(int id, String nama, String deskripsi, BigDecimal harga, int kategoriId, String gambar) {
+    public void updateProduct(int id, String nama, String deskripsi, int harga, int kategoriId, String gambar) {
         Produk produk = model.getProductById(id);
         if (produk != null) {
             produk.setNama(nama);
@@ -54,11 +51,14 @@ public class ProdukController {
         
     public void deleteProduk(int id) {
         Produk produk = model.getProductById(id);
-        if (produk != null) {
-            model.deleteProduct(id);
-            loadProductList();
-        } else {
+            if (produk != null) {
+                model.deleteProduct(id);
+            } else {
         }
+    }
+        
+    public Produk getProduk(int id) {
+        return model.getProductById(id);
     }
     
     public List<Kategori> loadCategoryList() {

@@ -4,13 +4,11 @@
  */
 package fruitopia.model;
 
-import java.math.BigDecimal;
-
 public class Produk {
     private int id;
     private String nama;
     private String deskripsi;
-    private BigDecimal harga;
+    private int harga;
     private int kategoriId;
     private String kategori;
     private String gambar;
@@ -18,7 +16,7 @@ public class Produk {
     public Produk() {
     }
 
-    public Produk(int id, String nama, String deskripsi, BigDecimal harga, int kategoriId, String gambar) {
+    public Produk(int id, String nama, String deskripsi, int harga, int kategoriId, String gambar) {
         this.id = id;
         this.nama = nama;
         this.deskripsi = deskripsi;
@@ -51,11 +49,11 @@ public class Produk {
         this.deskripsi = deskripsi;
     }
 
-    public BigDecimal getHarga() {
+    public int getHarga() {
         return harga;
     }
 
-    public void setHarga(BigDecimal harga) {
+    public void setHarga(int harga) {
         this.harga = harga;
     }
 
