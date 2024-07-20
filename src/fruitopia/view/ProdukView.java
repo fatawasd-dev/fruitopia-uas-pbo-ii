@@ -162,6 +162,7 @@ public class ProdukView extends javax.swing.JFrame {
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenu2 = new javax.swing.JMenu();
+        kategoriMenu = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -181,9 +182,9 @@ public class ProdukView extends javax.swing.JFrame {
 
         getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(6, 308, 670, 326));
 
-        jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        jLabel1.setText("Produk");
-        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(283, 6, -1, -1));
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        jLabel1.setText("Management Produk");
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 0, -1, -1));
 
         jLabel2.setText("Nama");
         getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 50, -1, -1));
@@ -281,6 +282,14 @@ public class ProdukView extends javax.swing.JFrame {
 
         jMenu2.setText("Produk");
         jMenuBar1.add(jMenu2);
+
+        kategoriMenu.setText("Kategori");
+        kategoriMenu.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                kategoriMenuMouseClicked(evt);
+            }
+        });
+        jMenuBar1.add(kategoriMenu);
 
         setJMenuBar(jMenuBar1);
 
@@ -409,6 +418,11 @@ public class ProdukView extends javax.swing.JFrame {
         browseImage();
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    private void kategoriMenuMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_kategoriMenuMouseClicked
+        new KategoriView().setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_kategoriMenuMouseClicked
+
     /**
      * @param args the command line arguments
      */
@@ -462,6 +476,7 @@ public class ProdukView extends javax.swing.JFrame {
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JMenu kategoriMenu;
     private javax.swing.JTable productTable;
     private javax.swing.JTextArea txtDescription;
     private javax.swing.JTextField txtImage;

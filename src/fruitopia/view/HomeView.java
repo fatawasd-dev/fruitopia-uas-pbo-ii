@@ -30,6 +30,7 @@ public class HomeView extends javax.swing.JFrame {
         menuBar = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         productMenu = new javax.swing.JMenu();
+        kategoriMenu = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -45,6 +46,14 @@ public class HomeView extends javax.swing.JFrame {
             }
         });
         menuBar.add(productMenu);
+
+        kategoriMenu.setText("Kategori");
+        kategoriMenu.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                kategoriMenuMouseClicked(evt);
+            }
+        });
+        menuBar.add(kategoriMenu);
 
         setJMenuBar(menuBar);
 
@@ -72,6 +81,11 @@ public class HomeView extends javax.swing.JFrame {
         new ProdukView().setVisible(true);
         this.dispose();
     }//GEN-LAST:event_productMenuMouseClicked
+
+    private void kategoriMenuMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_kategoriMenuMouseClicked
+        new KategoriView().setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_kategoriMenuMouseClicked
 
     /**
      * @param args the command line arguments
@@ -111,6 +125,7 @@ public class HomeView extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
     private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenu kategoriMenu;
     private javax.swing.JMenuBar menuBar;
     private javax.swing.JMenu productMenu;
     // End of variables declaration//GEN-END:variables
