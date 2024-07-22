@@ -8,6 +8,7 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
+import java.awt.Image;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.event.ActionEvent;
@@ -36,8 +37,7 @@ public class HomeView extends javax.swing.JFrame {
         this.setExtendedState(JFrame.MAXIMIZED_BOTH); 
         this.setVisible(true);
     }
-    
-        private void setupPOSPanel() {
+    private void setupPOSPanel() {
         JPanel panel = new JPanel(new BorderLayout());
 
         JPanel leftPanel = new JPanel(new BorderLayout());
@@ -112,8 +112,7 @@ public class HomeView extends javax.swing.JFrame {
 
     private void loadProducts() {
         // Sample product data
-        String[] productCodes = { "P001", "P002", "P003", "P004", "P005", "P006", "P007", "P008", "P009", "P010", 
-                                  "P011", "P012", "P013", "P014", "P015", "P016", "P017", "P018", "P019", "P020" };
+       String[] productCodes = { "P001", "P002", "P003", "P003", "P003", "P003", "P003", "P003", "P003", "P003"};
         String[] productNames = { "Apple", "Banana", "Orange", "Grape", "Peach", "Mango", "Pineapple", "Cherry", "Kiwi", "Watermelon", 
                                   "Strawberry", "Blueberry", "Raspberry", "Blackberry", "Papaya", "Guava", "Lychee", "Lemon", "Lime", "Coconut" };
         double[] productPrices = { 1.0, 0.5, 0.75, 1.5, 2.0, 1.25, 3.0, 0.2, 0.6, 0.9, 
@@ -128,10 +127,19 @@ public class HomeView extends javax.swing.JFrame {
             String productName = productNames[i];
             double productPrice = productPrices[i];
 
-            JButton productButton = new JButton("<html><center>" + productName + "<br>$" + productPrice + "</center></html>");
-            productButton.setPreferredSize(new Dimension(100, 100));
-            productButton.setMaximumSize(new Dimension(100, 100)); // Ensures button size remains constant
-            productButton.setMinimumSize(new Dimension(100, 100));
+            // Load image from folder
+            String imagePath = "images/image.jpg";
+            ImageIcon productImage = new ImageIcon(imagePath);
+            Image img = productImage.getImage();
+            Image scaledImg = img.getScaledInstance(150, 150, Image.SCALE_SMOOTH);
+            productImage = new ImageIcon(scaledImg);
+
+            JButton productButton = new JButton("<html><center>" + productName + "<br>$" + productPrice + "</center></html>", productImage);
+            productButton.setVerticalTextPosition(SwingConstants.BOTTOM);
+            productButton.setHorizontalTextPosition(SwingConstants.CENTER);
+            productButton.setPreferredSize(new Dimension(200, 200));
+            productButton.setMaximumSize(new Dimension(200, 200)); // Ensures button size remains constant
+            productButton.setMinimumSize(new Dimension(200, 200));
             productButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
@@ -140,7 +148,7 @@ public class HomeView extends javax.swing.JFrame {
             });
 
             rowPanel.add(productButton);
-            if ((i + 1) % 8 == 0) {
+            if ((i + 1) % 4 == 0) {
                 rowPanel = new JPanel();
                 rowPanel.setLayout(new BoxLayout(rowPanel, BoxLayout.X_AXIS));
                 productPanel.add(rowPanel);
