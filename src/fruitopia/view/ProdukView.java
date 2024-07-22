@@ -163,6 +163,7 @@ public class ProdukView extends javax.swing.JFrame {
         jMenu1 = new javax.swing.JMenu();
         jMenu2 = new javax.swing.JMenu();
         kategoriMenu = new javax.swing.JMenu();
+        pesananMenu = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -290,6 +291,14 @@ public class ProdukView extends javax.swing.JFrame {
             }
         });
         jMenuBar1.add(kategoriMenu);
+
+        pesananMenu.setText("Pesanan");
+        pesananMenu.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                pesananMenuMouseClicked(evt);
+            }
+        });
+        jMenuBar1.add(pesananMenu);
 
         setJMenuBar(jMenuBar1);
 
@@ -423,6 +432,11 @@ public class ProdukView extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_kategoriMenuMouseClicked
 
+    private void pesananMenuMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pesananMenuMouseClicked
+        new PesananView().setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_pesananMenuMouseClicked
+
     /**
      * @param args the command line arguments
      */
@@ -477,6 +491,7 @@ public class ProdukView extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JMenu kategoriMenu;
+    private javax.swing.JMenu pesananMenu;
     private javax.swing.JTable productTable;
     private javax.swing.JTextArea txtDescription;
     private javax.swing.JTextField txtImage;

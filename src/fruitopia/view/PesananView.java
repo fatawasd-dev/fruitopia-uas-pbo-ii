@@ -4,19 +4,41 @@
  */
 package fruitopia.view;
 
+import fruitopia.controller.PesananController;
+import fruitopia.model.Pesanan;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.List;
+
 /**
  *
- * @author Asani
+ * @author LENOVOa
  */
-public class HomeView extends javax.swing.JFrame {
-    
+public class PesananView extends javax.swing.JFrame {
+    final private PesananController controller;
+    private int pesananIdSelected = 0;
     /**
-     * Creates new form HomeView
+     * Creates new form PesananView
      */
-    public HomeView() {
+    public PesananView() {
+        this.controller = new PesananController();
         initComponents();
         this.setLocationRelativeTo(null);
+        
+        loadData();
+        
+        pesananTable.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent evt) {
+                int row = pesananTable.rowAtPoint(evt.getPoint());
+                if (evt.getClickCount() == 2 && row != -1) {
+                    // Kode yang dijalankan ketika spesifik row didouble click
+                    System.out.println("Row " + row + " didouble click");
+                }
+            }
+        });
     }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -26,6 +48,8 @@ public class HomeView extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jScrollPane1 = new javax.swing.JScrollPane();
+        pesananTable = new javax.swing.JTable();
         jLabel1 = new javax.swing.JLabel();
         menuBar = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
@@ -35,7 +59,21 @@ public class HomeView extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jLabel1.setText("Welcome to home");
+        pesananTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane1.setViewportView(pesananTable);
+
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        jLabel1.setText("List Pesanan");
 
         jMenu1.setText("Home");
         jMenu1.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -76,20 +114,31 @@ public class HomeView extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(200, 200, 200)
-                .addComponent(jLabel1)
-                .addContainerGap(447, Short.MAX_VALUE))
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 640, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(155, 155, 155)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap()
                 .addComponent(jLabel1)
-                .addContainerGap(326, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 457, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jMenu1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenu1MouseClicked
+        new HomeView().setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_jMenu1MouseClicked
 
     private void productMenuMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_productMenuMouseClicked
         new ProdukView().setVisible(true);
@@ -105,11 +154,6 @@ public class HomeView extends javax.swing.JFrame {
         new PesananView().setVisible(true);
         this.dispose();
     }//GEN-LAST:event_pesananMenuMouseClicked
-
-    private void jMenu1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenu1MouseClicked
-        new HomeView().setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_jMenu1MouseClicked
 
     /**
      * @param args the command line arguments
@@ -128,20 +172,20 @@ public class HomeView extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(HomeView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(PesananView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(HomeView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(PesananView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(HomeView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(PesananView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(HomeView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(PesananView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new HomeView().setVisible(true);
+                new PesananView().setVisible(true);
             }
         });
     }
@@ -149,9 +193,38 @@ public class HomeView extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
     private javax.swing.JMenu jMenu1;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JMenu kategoriMenu;
     private javax.swing.JMenuBar menuBar;
     private javax.swing.JMenu pesananMenu;
+    private javax.swing.JTable pesananTable;
     private javax.swing.JMenu productMenu;
     // End of variables declaration//GEN-END:variables
+
+    private void loadData() {
+       List<Pesanan> kategori = controller.loadPesananList();
+       displayPesananList(kategori);
+    }
+
+   public void displayPesananList(List<Pesanan> pesananList) {
+    String[] columnNames = {"ID", "User ID", "Tanggal Pesan", "Total Harga"};
+    Object[][] data = new Object[pesananList.size()][4];
+    for (int i = 0; i < pesananList.size(); i++) {
+        Pesanan pesanan = pesananList.get(i);
+        data[i][0] = pesanan.getId();
+        data[i][1] = pesanan.getUserId();
+        data[i][2] = pesanan.getTanggalPesan();
+        data[i][3] = pesanan.getTotalHarga();
+    }
+
+    pesananTable.setModel(new javax.swing.table.DefaultTableModel(data, columnNames) {
+        Class[] types = new Class[] {
+            java.lang.Integer.class, java.lang.Integer.class, java.sql.Date.class, java.math.BigDecimal.class
+        };
+
+        public Class getColumnClass(int columnIndex) {
+            return types[columnIndex];
+        }
+    });
+}
 }

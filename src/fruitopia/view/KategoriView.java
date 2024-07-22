@@ -64,6 +64,7 @@ public class KategoriView extends javax.swing.JFrame {
         jMenu2 = new javax.swing.JMenu();
         productMenu = new javax.swing.JMenu();
         kategoriMenu = new javax.swing.JMenu();
+        pesananMenu = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -136,6 +137,14 @@ public class KategoriView extends javax.swing.JFrame {
             }
         });
         menuBar.add(kategoriMenu);
+
+        pesananMenu.setText("Pesanan");
+        pesananMenu.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                pesananMenuMouseClicked(evt);
+            }
+        });
+        menuBar.add(pesananMenu);
 
         setJMenuBar(menuBar);
 
@@ -245,6 +254,11 @@ public class KategoriView extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jButton3ActionPerformed
 
+    private void pesananMenuMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pesananMenuMouseClicked
+        new PesananView().setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_pesananMenuMouseClicked
+
     /**
      * @param args the command line arguments
      */
@@ -314,6 +328,7 @@ public class KategoriView extends javax.swing.JFrame {
     private javax.swing.JTextField jTextField1;
     private javax.swing.JMenu kategoriMenu;
     private javax.swing.JMenuBar menuBar;
+    private javax.swing.JMenu pesananMenu;
     private javax.swing.JMenu productMenu;
     // End of variables declaration//GEN-END:variables
 
