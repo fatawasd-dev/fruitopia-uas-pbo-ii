@@ -4,19 +4,172 @@
  */
 package fruitopia.view;
 
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.GridLayout;
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 /**
  *
  * @author Asani
  */
 public class HomeView extends javax.swing.JFrame {
-    
+    private JTextField productCodeField;
+    private JTextField quantityField;
+    private JButton addButton;
+    private JTable cartTable;
+    private JButton checkoutButton;
+    private JLabel totalLabel;
+    private JPanel productPanel;
+    private DefaultTableModel tableModel;
     /**
      * Creates new form HomeView
      */
     public HomeView() {
         initComponents();
         this.setLocationRelativeTo(null);
+        setupPOSPanel();
+        this.setExtendedState(JFrame.MAXIMIZED_BOTH); 
+        this.setVisible(true);
     }
+    
+        private void setupPOSPanel() {
+        JPanel panel = new JPanel(new BorderLayout());
+
+        JPanel leftPanel = new JPanel(new BorderLayout());
+        productPanel = new JPanel();
+        productPanel.setLayout(new BoxLayout(productPanel, BoxLayout.Y_AXIS));
+        JScrollPane productScrollPane = new JScrollPane(productPanel);
+        leftPanel.add(productScrollPane, BorderLayout.CENTER);
+
+        JPanel rightPanel = new JPanel(null);
+
+        JLabel productCodeLabel = new JLabel("Product Code:");
+        productCodeLabel.setBounds(10, 10, 100, 25);
+        rightPanel.add(productCodeLabel);
+
+        productCodeField = new JTextField(20);
+        productCodeField.setBounds(120, 10, 160, 25);
+        rightPanel.add(productCodeField);
+
+        JLabel quantityLabel = new JLabel("Quantity:");
+        quantityLabel.setBounds(10, 40, 100, 25);
+        rightPanel.add(quantityLabel);
+
+        quantityField = new JTextField(20);
+        quantityField.setBounds(120, 40, 160, 25);
+        rightPanel.add(quantityField);
+
+        addButton = new JButton("Add to Cart");
+        addButton.setBounds(290, 10, 120, 55);
+        rightPanel.add(addButton);
+
+        String[] columnNames = { "Product Code", "Product Name", "Quantity", "Price", "Total" };
+        tableModel = new DefaultTableModel(columnNames, 0);
+        cartTable = new JTable(tableModel);
+
+        JScrollPane cartScrollPane = new JScrollPane(cartTable);
+        cartScrollPane.setBounds(10, 80, 400, 200);
+        rightPanel.add(cartScrollPane);
+
+        totalLabel = new JLabel("Total: $0.00");
+        totalLabel.setBounds(10, 290, 200, 25);
+        rightPanel.add(totalLabel);
+
+        checkoutButton = new JButton("Checkout");
+        checkoutButton.setBounds(290, 290, 120, 25);
+        rightPanel.add(checkoutButton);
+
+        panel.add(leftPanel, BorderLayout.WEST);
+        panel.add(rightPanel, BorderLayout.CENTER);
+
+        this.getContentPane().setLayout(new BorderLayout());
+        this.getContentPane().add(panel, BorderLayout.CENTER);
+        this.pack();
+
+        addButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                addProductToCart(productCodeField.getText(), "Sample Product", Integer.parseInt(quantityField.getText()), 10.0);
+            }
+        });
+
+        checkoutButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JOptionPane.showMessageDialog(null, "Checkout successful!");
+                tableModel.setRowCount(0); // Clear cart
+                updateTotal();
+            }
+        });
+
+        loadProducts();
+    }
+
+    private void loadProducts() {
+        // Sample product data
+        String[] productCodes = { "P001", "P002", "P003", "P004", "P005", "P006", "P007", "P008", "P009", "P010", 
+                                  "P011", "P012", "P013", "P014", "P015", "P016", "P017", "P018", "P019", "P020" };
+        String[] productNames = { "Apple", "Banana", "Orange", "Grape", "Peach", "Mango", "Pineapple", "Cherry", "Kiwi", "Watermelon", 
+                                  "Strawberry", "Blueberry", "Raspberry", "Blackberry", "Papaya", "Guava", "Lychee", "Lemon", "Lime", "Coconut" };
+        double[] productPrices = { 1.0, 0.5, 0.75, 1.5, 2.0, 1.25, 3.0, 0.2, 0.6, 0.9, 
+                                   1.1, 2.5, 1.3, 2.8, 1.4, 2.3, 2.6, 0.7, 0.8, 1.7 };
+
+        JPanel rowPanel = new JPanel();
+        rowPanel.setLayout(new BoxLayout(rowPanel, BoxLayout.X_AXIS));
+        productPanel.add(rowPanel);
+
+        for (int i = 0; i < productCodes.length; i++) {
+            String productCode = productCodes[i];
+            String productName = productNames[i];
+            double productPrice = productPrices[i];
+
+            JButton productButton = new JButton("<html><center>" + productName + "<br>$" + productPrice + "</center></html>");
+            productButton.setPreferredSize(new Dimension(100, 100));
+            productButton.setMaximumSize(new Dimension(100, 100)); // Ensures button size remains constant
+            productButton.setMinimumSize(new Dimension(100, 100));
+            productButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    addProductToCart(productCode, productName, 1, productPrice);
+                }
+            });
+
+            rowPanel.add(productButton);
+            if ((i + 1) % 8 == 0) {
+                rowPanel = new JPanel();
+                rowPanel.setLayout(new BoxLayout(rowPanel, BoxLayout.X_AXIS));
+                productPanel.add(rowPanel);
+            }
+        }
+
+        this.revalidate();
+        this.repaint();
+    }
+
+
+    private void addProductToCart(String productCode, String productName, int quantity, double price) {
+        double total = price * quantity;
+
+        tableModel.addRow(new Object[] { productCode, productName, quantity, price, total });
+
+        updateTotal();
+    }
+
+    private void updateTotal() {
+        double total = 0.0;
+
+        for (int i = 0; i < tableModel.getRowCount(); i++) {
+            total += (double) tableModel.getValueAt(i, 4);
+        }
+
+        totalLabel.setText("Total: $" + String.format("%.2f", total));
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -26,7 +179,6 @@ public class HomeView extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel1 = new javax.swing.JLabel();
         menuBar = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         productMenu = new javax.swing.JMenu();
@@ -34,8 +186,6 @@ public class HomeView extends javax.swing.JFrame {
         pesananMenu = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-
-        jLabel1.setText("Welcome to home");
 
         jMenu1.setText("Home");
         jMenu1.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -70,23 +220,6 @@ public class HomeView extends javax.swing.JFrame {
         menuBar.add(pesananMenu);
 
         setJMenuBar(menuBar);
-
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(200, 200, 200)
-                .addComponent(jLabel1)
-                .addContainerGap(447, Short.MAX_VALUE))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(155, 155, 155)
-                .addComponent(jLabel1)
-                .addContainerGap(326, Short.MAX_VALUE))
-        );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -147,7 +280,6 @@ public class HomeView extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu kategoriMenu;
     private javax.swing.JMenuBar menuBar;
