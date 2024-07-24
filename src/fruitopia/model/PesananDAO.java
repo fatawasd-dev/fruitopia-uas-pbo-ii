@@ -29,8 +29,8 @@ public class PesananDAO {
             String query = "INSERT INTO pesanan (user_id, tanggal_pesan, total_harga) VALUES (?, ?, ?)";
             PreparedStatement stmt = connection.prepareStatement(query);
             stmt.setInt(1, pesanan.getUserId());
-            stmt.setDate(2, pesanan.getTanggalPesan());
-            stmt.setBigDecimal(3, pesanan.getTotalHarga());
+            stmt.setDate(2, new java.sql.Date(pesanan.getTanggalPesan().getTime()));
+            stmt.setInt(3, pesanan.getTotalHarga());
             stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -48,7 +48,7 @@ public class PesananDAO {
                 pesanan.setId(rs.getInt("id"));
                 pesanan.setUserId(rs.getInt("user_id"));
                 pesanan.setTanggalPesan(rs.getDate("tanggal_pesan"));
-                pesanan.setTotalHarga(rs.getBigDecimal("total_harga"));
+                pesanan.setTotalHarga(rs.getInt("total_harga"));
                 listPesanan.add(pesanan);
             }
         } catch (SQLException e) {
@@ -69,7 +69,7 @@ public class PesananDAO {
                 pesanan.setId(rs.getInt("id"));
                 pesanan.setUserId(rs.getInt("user_id"));
                 pesanan.setTanggalPesan(rs.getDate("tanggal_pesan"));
-                pesanan.setTotalHarga(rs.getBigDecimal("total_harga"));
+                pesanan.setTotalHarga(rs.getInt("total_harga"));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -82,8 +82,8 @@ public class PesananDAO {
             String query = "UPDATE pesanan SET user_id = ?, tanggal_pesan = ?, total_harga = ? WHERE id = ?";
             PreparedStatement stmt = connection.prepareStatement(query);
             stmt.setInt(1, pesanan.getUserId());
-            stmt.setDate(2, pesanan.getTanggalPesan());
-            stmt.setBigDecimal(3, pesanan.getTotalHarga());
+            stmt.setDate(2, new java.sql.Date(pesanan.getTanggalPesan().getTime()));
+            stmt.setInt(3, pesanan.getTotalHarga());
             stmt.setInt(4, pesanan.getId());
             stmt.executeUpdate();
         } catch (SQLException e) {

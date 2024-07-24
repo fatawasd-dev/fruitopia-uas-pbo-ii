@@ -5,7 +5,7 @@
 package fruitopia.model;
 
 import java.math.BigDecimal;
-import java.sql.Date;
+import java.util.Date;
 
 /**
  *
@@ -15,13 +15,12 @@ public class Pesanan {
     private int id;
     private int userId;
     private Date tanggalPesan;
-    private BigDecimal totalHarga;
+    private int totalHarga;
     
     public Pesanan() {
     }
 
-    public Pesanan(int id, int userId, Date tanggalPesan, BigDecimal totalHarga) {
-        this.id = id;
+    public Pesanan(int userId, Date tanggalPesan, int totalHarga) {
         this.userId = userId;
         this.tanggalPesan = tanggalPesan;
         this.totalHarga = totalHarga;
@@ -51,11 +50,11 @@ public class Pesanan {
         this.tanggalPesan = tanggalPesan;
     }
 
-    public BigDecimal getTotalHarga() {
+    public int getTotalHarga() {
         return totalHarga;
     }
 
-    public void setTotalHarga(BigDecimal totalHarga) {
+    public void setTotalHarga(int totalHarga) {
         this.totalHarga = totalHarga;
     }
 }

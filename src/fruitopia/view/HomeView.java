@@ -4,6 +4,10 @@
  */
 package fruitopia.view;
 
+import fruitopia.controller.PesananController;
+import fruitopia.controller.ProdukController;
+import fruitopia.model.Pesanan;
+import fruitopia.model.Produk;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -13,12 +17,21 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import javazoom.jl.decoder.JavaLayerException;
+import javazoom.jl.player.Player;
+import javax.swing.Timer;
+
 
 /**
  *
  * @author Asani
  */
 public class HomeView extends javax.swing.JFrame {
+    private ProdukController productController;
+    private PesananController controller;
     private JTextField productCodeField;
     private JTextField quantityField;
     private JButton addButton;
@@ -27,16 +40,23 @@ public class HomeView extends javax.swing.JFrame {
     private JLabel totalLabel;
     private JPanel productPanel;
     private DefaultTableModel tableModel;
+    private JLabel movingLabel;
+    private int xPos = 10;
+    private int yPos = 10;
+    
     /**
      * Creates new form HomeView
      */
     public HomeView() {
+        this.productController = new ProdukController();
+        this.controller = new PesananController();
         initComponents();
         this.setLocationRelativeTo(null);
         setupPOSPanel();
         this.setExtendedState(JFrame.MAXIMIZED_BOTH); 
         this.setVisible(true);
     }
+    
     private void setupPOSPanel() {
         JPanel panel = new JPanel(new BorderLayout());
 
@@ -48,25 +68,24 @@ public class HomeView extends javax.swing.JFrame {
 
         JPanel rightPanel = new JPanel(null);
 
-        JLabel productCodeLabel = new JLabel("Product Code:");
-        productCodeLabel.setBounds(10, 10, 100, 25);
-        rightPanel.add(productCodeLabel);
+        // Panel untuk logo dan teks FRUITOPIA
+        JPanel logoPanel = new JPanel(null);
+        logoPanel.setBounds(10, 10, 400, 50);
 
-        productCodeField = new JTextField(20);
-        productCodeField.setBounds(120, 10, 160, 25);
-        rightPanel.add(productCodeField);
+        ImageIcon logoIcon = new ImageIcon("src/fruitopia/assets/logo-transparent.png");
+        Image logoImg = logoIcon.getImage();
+        Image scaledLogoImg = logoImg.getScaledInstance(40, 40, Image.SCALE_SMOOTH);
+        logoIcon = new ImageIcon(scaledLogoImg);
 
-        JLabel quantityLabel = new JLabel("Quantity:");
-        quantityLabel.setBounds(10, 40, 100, 25);
-        rightPanel.add(quantityLabel);
+        JLabel logoLabel = new JLabel(logoIcon);
+        logoLabel.setBounds(0, 0, 40, 40);
+        logoPanel.add(logoLabel);
 
-        quantityField = new JTextField(20);
-        quantityField.setBounds(120, 40, 160, 25);
-        rightPanel.add(quantityField);
+        movingLabel = new JLabel("<html><span style='font-size:24px; font-weight:bold;'>FRUITOPIA</span></html>");
+        movingLabel.setBounds(xPos, yPos, 300, 40);
+        logoPanel.add(movingLabel);
 
-        addButton = new JButton("Add to Cart");
-        addButton.setBounds(290, 10, 120, 55);
-        rightPanel.add(addButton);
+        rightPanel.add(logoPanel);
 
         String[] columnNames = { "Product Code", "Product Name", "Quantity", "Price", "Total" };
         tableModel = new DefaultTableModel(columnNames, 0);
@@ -76,7 +95,7 @@ public class HomeView extends javax.swing.JFrame {
         cartScrollPane.setBounds(10, 80, 400, 200);
         rightPanel.add(cartScrollPane);
 
-        totalLabel = new JLabel("Total: $0.00");
+        totalLabel = new JLabel("Total: Rp 0");
         totalLabel.setBounds(10, 290, 200, 25);
         rightPanel.add(totalLabel);
 
@@ -91,50 +110,69 @@ public class HomeView extends javax.swing.JFrame {
         this.getContentPane().add(panel, BorderLayout.CENTER);
         this.pack();
 
-        addButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                addProductToCart(productCodeField.getText(), "Sample Product", Integer.parseInt(quantityField.getText()), 10.0);
-            }
-        });
-
         checkoutButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                int totalHarga = 0;
+
+                for (int i = 0; i < tableModel.getRowCount(); i++) {
+                    totalHarga += (int) tableModel.getValueAt(i, 4);
+                }
+
+                // Buat objek Pesanan (misalnya, dengan userId 1 untuk sementara)
+                Pesanan pesanan = new Pesanan(1, new java.util.Date(), totalHarga);
+
+                // Simpan pesanan ke database
+                controller.addPesanan(pesanan);
+
                 JOptionPane.showMessageDialog(null, "Checkout successful!");
                 tableModel.setRowCount(0); // Clear cart
                 updateTotal();
+
+                // Putar suara setelah checkout berhasil
+                playSound("src/fruitopia/assets/pesanan-diterima.mp3");
             }
         });
 
         loadProducts();
+        startMovingLabel();
+    }
+    
+    private void startMovingLabel() {
+        Timer timer = new Timer(100, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                xPos += 5;
+                if (xPos > 210) {
+                    xPos = -movingLabel.getWidth();
+                }
+                movingLabel.setBounds(xPos, yPos, movingLabel.getPreferredSize().width, movingLabel.getPreferredSize().height);
+                movingLabel.revalidate();
+                movingLabel.repaint();
+            }
+        });
+        timer.start();
     }
 
     private void loadProducts() {
-        // Sample product data
-       String[] productCodes = { "P001", "P002", "P003", "P003", "P003", "P003", "P003", "P003", "P003", "P003"};
-        String[] productNames = { "Apple", "Banana", "Orange", "Grape", "Peach", "Mango", "Pineapple", "Cherry", "Kiwi", "Watermelon", 
-                                  "Strawberry", "Blueberry", "Raspberry", "Blackberry", "Papaya", "Guava", "Lychee", "Lemon", "Lime", "Coconut" };
-        double[] productPrices = { 1.0, 0.5, 0.75, 1.5, 2.0, 1.25, 3.0, 0.2, 0.6, 0.9, 
-                                   1.1, 2.5, 1.3, 2.8, 1.4, 2.3, 2.6, 0.7, 0.8, 1.7 };
+        List<Produk> products = productController.loadProductList();
 
         JPanel rowPanel = new JPanel();
         rowPanel.setLayout(new BoxLayout(rowPanel, BoxLayout.X_AXIS));
         productPanel.add(rowPanel);
 
-        for (int i = 0; i < productCodes.length; i++) {
-            String productCode = productCodes[i];
-            String productName = productNames[i];
-            double productPrice = productPrices[i];
+        for (int i = 0; i < products.size(); i++) {
+            Produk product = products.get(i);
+            int productCode = product.getId();
+            String productName = product.getNama();
+            int productPrice = product.getHarga();
 
-            // Load image from folder
-            String imagePath = "images/image.jpg";
-            ImageIcon productImage = new ImageIcon(imagePath);
+            ImageIcon productImage = new ImageIcon("images/"+product.getGambar());
             Image img = productImage.getImage();
             Image scaledImg = img.getScaledInstance(150, 150, Image.SCALE_SMOOTH);
             productImage = new ImageIcon(scaledImg);
 
-            JButton productButton = new JButton("<html><center>" + productName + "<br>$" + productPrice + "</center></html>", productImage);
+            JButton productButton = new JButton("<html><center>" + productName + "<br>Rp " + productPrice + "</center></html>", productImage);
             productButton.setVerticalTextPosition(SwingConstants.BOTTOM);
             productButton.setHorizontalTextPosition(SwingConstants.CENTER);
             productButton.setPreferredSize(new Dimension(200, 200));
@@ -148,7 +186,7 @@ public class HomeView extends javax.swing.JFrame {
             });
 
             rowPanel.add(productButton);
-            if ((i + 1) % 4 == 0) {
+            if ((i + 1) % 8 == 0) {
                 rowPanel = new JPanel();
                 rowPanel.setLayout(new BoxLayout(rowPanel, BoxLayout.X_AXIS));
                 productPanel.add(rowPanel);
@@ -160,8 +198,8 @@ public class HomeView extends javax.swing.JFrame {
     }
 
 
-    private void addProductToCart(String productCode, String productName, int quantity, double price) {
-        double total = price * quantity;
+    private void addProductToCart(int productCode, String productName, int quantity, int price) {
+        int total = price * quantity;
 
         tableModel.addRow(new Object[] { productCode, productName, quantity, price, total });
 
@@ -169,14 +207,29 @@ public class HomeView extends javax.swing.JFrame {
     }
 
     private void updateTotal() {
-        double total = 0.0;
+        int total = 0;
 
         for (int i = 0; i < tableModel.getRowCount(); i++) {
-            total += (double) tableModel.getValueAt(i, 4);
+            total += (int) tableModel.getValueAt(i, 4);
         }
 
-        totalLabel.setText("Total: $" + String.format("%.2f", total));
+        totalLabel.setText("Total: Rp " + total);
     }
+    
+    private void playSound(String filePath) {
+    new Thread(new Runnable() {
+        @Override
+        public void run() {
+            try {
+                FileInputStream fileInputStream = new FileInputStream(filePath);
+                Player player = new Player(fileInputStream);
+                player.play();
+            } catch (FileNotFoundException | JavaLayerException e) {
+                e.printStackTrace();
+            }
+        }
+    }).start();
+}
     
     /**
      * This method is called from within the constructor to initialize the form.

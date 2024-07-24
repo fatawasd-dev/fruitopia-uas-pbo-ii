@@ -18,10 +18,8 @@ public class Fruitopia {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        HomeView home = new HomeView();
-        home.setVisible(true);
-//        LoginView login = new LoginView();
-//        login.setVisible(true);
+        LoginView login = new LoginView();
+        login.setVisible(true);
     }
     
 }
